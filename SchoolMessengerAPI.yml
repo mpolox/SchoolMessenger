@@ -26,7 +26,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: false
-    projects: 'SchoolMessenger/SchoolMessengerAPI.csproj'
+    projects: 'SchoolMessenger/SchoolMessengerAPI/SchoolMessengerAPI.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
 
@@ -41,3 +41,5 @@ steps:
 # SRV: eu2srvsisdev01 #
 # SQL: EU2SQLSISDEV01 #
 #######################
+
+
