@@ -21,8 +21,10 @@ namespace SchoolMessengerAPI.Models
         [Required]
         public string Email { get; set; }
 
+        [MaxLength(25)]
         public string CellPhone { get; set; }
 
+        [MaxLength(25)]
         public string Phone { get; set; }
 
         public string Address { get; set; }

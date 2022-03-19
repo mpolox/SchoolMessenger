@@ -10,17 +10,36 @@ namespace SchoolMessengerAPI.Data
         {
             _context = context;
         }
+
+        public Student AddStudent(Student aStudent)
+        {
+            _context.Students.Add(aStudent);            
+            _context.SaveChanges();
+            return (aStudent);
+        }
+
+        public bool DeleteStudentById(int id)
+        {
+            var myStudent = _context.Students.FirstOrDefault(x => x.Id == id);
+            if (myStudent == null)
+            {
+                return false;
+            }
+            _context.Remove(myStudent);
+            _context.SaveChanges();
+            return true;
+        }
+
         public Student GetStudentByEmail(string email)
         {
-            throw new NotImplementedException();
-
-            var response = _context.Students.FirstOrDefault();
+            var response = _context.Students.FirstOrDefault(x => x.Email == email);
             return response;
         }
 
         public Student GetStudentById(int id)
         {
-            throw new NotImplementedException();
+            var response = _context.Students.FirstOrDefault(x => x.Id == id);
+            return response;
         }
 
         public Student GetStudentByName(string name)
@@ -30,7 +49,8 @@ namespace SchoolMessengerAPI.Data
 
         public IEnumerable<Student> GetStudents()
         {
-            throw new NotImplementedException();
+            var students = _context.Students.ToList();
+            return students;
         }
     }
 }

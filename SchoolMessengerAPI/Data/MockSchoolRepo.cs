@@ -28,6 +28,16 @@ namespace SchoolMessengerAPI.Data
             StudentId = "clave3423423_2"
         };
 
+        public Student AddStudent(Student aStudent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteStudentById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Student GetStudentByEmail(string email)
         {
             return s1;

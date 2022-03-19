@@ -10,10 +10,11 @@ namespace SchoolMessengerAPI.Data
 
         }
 
+        public DbSet<Parent> Parents { get; set; }
+        public DbSet<Room> Rooms { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }
-        public DbSet<SubjectClass> SubjectClasses { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Parent> Parents { get; set; }
+
     }
 }
