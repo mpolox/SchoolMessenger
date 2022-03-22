@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # Local .terraform directories
 **/.terraform/*
 terraform*.exe
+.terraform.tfstate.lock.info
