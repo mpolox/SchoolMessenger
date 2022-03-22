@@ -1,0 +1,45 @@
+# ASP.NET Core
+# Marcopolo Ramos
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+#- task: DotNetCoreCLI@2
+#  displayName: 'Solution Test'
+#  inputs:
+#    command: test
+#    projects: '**/*test/*.csproj'
+#    arguments: '--configuration $(buildConfiguration)'
+
+#- script: dotnet build --configuration $(buildConfiguration)  
+#  displayName: 'dotnet build $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Deploy API Code'
+  inputs:
+    command: publish
+    publishWebProjects: false
+    projects: 'SchoolMessengerAPI/SchoolMessengerAPI.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
+
+###########################
+# DEPLOY TO :             #
+# RSG: SchoolMessengerRSG #
+# ASP: SchoolMessengerASP #
+# API: SchoolMessengerAPI #
+# SRV: MarcopoloSqlSvr    #
+# SQL: SchoolMessengerSQL #
+###########################
+
+
