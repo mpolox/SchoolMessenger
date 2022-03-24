@@ -15,7 +15,7 @@ namespace SchoolMessengerAPI.Controllers
             _repo = repo;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetById/{id}")]
         public ActionResult<Student> GetStudentById(int id)
         {
             var response = _repo.GetStudentById(id);
@@ -51,6 +51,26 @@ namespace SchoolMessengerAPI.Controllers
             return Ok(response);
         }
 
-
+        [HttpGet("GetByName/{aName}")]
+        public ActionResult<Student> GetStudetByName(string aName)
+        {
+            var response = _repo.GetStudentByName(aName);
+            if (response == null)
+            {
+                return NotFound(aName);
+            }
+            return Ok(response);
+        }
+    
+        [HttpGet("GetByParentId")]
+        public ActionResult<IEnumerable<Student>> GetByParentId(int id)
+        {
+            var response = _repo.GetByParentId(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
     }
 }

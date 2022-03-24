@@ -9,3 +9,5 @@ az extension add --upgrade -n account
 terraform plan
 terraform apply
 terraform destroy
+
+ terraform plan -var-file .\SCM_Dev.tfvars

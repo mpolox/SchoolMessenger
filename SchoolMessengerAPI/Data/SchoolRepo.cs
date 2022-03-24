@@ -43,15 +43,68 @@ namespace SchoolMessengerAPI.Data
             return response;
         }
 
-        public Student GetStudentByName(string name)
+        public IEnumerable<Student> GetStudentByName(string name)
         {
-            throw new NotImplementedException();
+            var response = _context.Students.Where(x => x.FirstName == name).ToList();
+            return response;
         }
 
         public IEnumerable<Student> GetStudents()
         {
             var students = _context.Students.ToList();
             return students;
+        }
+
+        public IEnumerable<Student> GetByParentId(int id)
+        {
+            //var response = _context.Parents.Where(x => x.Id == id).Select(c => c.Students).FirstOrDefault();
+            var response = _context.ParentStudents.Where(x => x.Parent.Id == id).Select(s => s.Student).ToList();
+            return response;
+        }
+        #endregion
+
+        #region Parents
+        public Parent AddParent(Parent aParent)
+        {
+            _context.Parents.Add(aParent);
+            _context.SaveChanges();
+            return (aParent);
+        }
+
+        public bool DeleteParenttById(int id)
+        {
+            var myParent = _context.Parents.FirstOrDefault(x => x.Id == id);
+            if (myParent == null)
+            {
+                return false;
+            }
+            _context.Remove(myParent);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public Parent GetParentByEmail(string email)
+        {
+            var response = _context.Parents.FirstOrDefault(x => x.Email == email);
+            return response;
+        }
+
+        public Parent GetParentById(int id)
+        {
+            var response = _context.Parents.FirstOrDefault(x => x.Id == id);
+            return response;
+        }
+
+        public IEnumerable<Parent> GetParentByName(string name)
+        {
+            var response = _context.Parents.Where(x => x.FirstName == name).ToList();
+            return response;
+        }
+
+        public IEnumerable<Parent> GetParents()
+        {
+            var response = _context.Parents.ToList();
+            return response;
         }
 
         #endregion

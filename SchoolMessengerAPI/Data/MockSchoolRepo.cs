@@ -28,7 +28,17 @@ namespace SchoolMessengerAPI.Data
             StudentId = "clave3423423_2"
         };
 
+        public Parent AddParent(Parent aStudent)
+        {
+            throw new NotImplementedException();
+        }
+
         public Student AddStudent(Student aStudent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteParenttById(int id)
         {
             throw new NotImplementedException();
         }
@@ -38,27 +48,49 @@ namespace SchoolMessengerAPI.Data
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Student> GetByParentId(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Parent GetParentByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Parent GetParentById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Parent> GetParentByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Parent> GetParents()
+        {
+            throw new NotImplementedException();
+        }
+
         public Student GetStudentByEmail(string email)
         {
-            return s1;
+            throw new NotImplementedException();
         }
 
         public Student GetStudentById(int id)
         {
-            return s1;
+            throw new NotImplementedException();
         }
 
-        public Student GetStudentByName(string name)
+        public IEnumerable<Student> GetStudentByName(string name)
         {
-            return s1;
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Student> GetStudents()
         {
-            var students = new List<Student>();
-            students.Add(s1);
-            students.Add(s2);
-            return students;
+            throw new NotImplementedException();
         }
     }
 }

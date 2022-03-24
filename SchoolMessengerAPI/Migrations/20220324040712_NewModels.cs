@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolMessengerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class BasicModels : Migration
+    public partial class NewModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,12 +26,6 @@ namespace SchoolMessengerAPI.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<int>(
-                name: "ParentId",
-                table: "Students",
-                type: "int",
-                nullable: true);
-
             migrationBuilder.AddColumn<string>(
                 name: "Phone",
                 table: "Students",
@@ -46,6 +40,7 @@ namespace SchoolMessengerAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ParentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MotherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -113,28 +108,48 @@ namespace SchoolMessengerAPI.Migrations
                     table.PrimaryKey("PK_Teachers", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ParentStudents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParentStudents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ParentStudents_Parents_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Parents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParentStudents_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Students_ParentId",
-                table: "Students",
+                name: "IX_ParentStudents_ParentId",
+                table: "ParentStudents",
                 column: "ParentId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Students_Parents_ParentId",
-                table: "Students",
-                column: "ParentId",
-                principalTable: "Parents",
-                principalColumn: "Id");
+            migrationBuilder.CreateIndex(
+                name: "IX_ParentStudents_StudentId",
+                table: "ParentStudents",
+                column: "StudentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Students_Parents_ParentId",
-                table: "Students");
-
             migrationBuilder.DropTable(
-                name: "Parents");
+                name: "ParentStudents");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
@@ -145,9 +160,8 @@ namespace SchoolMessengerAPI.Migrations
             migrationBuilder.DropTable(
                 name: "Teachers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Students_ParentId",
-                table: "Students");
+            migrationBuilder.DropTable(
+                name: "Parents");
 
             migrationBuilder.DropColumn(
                 name: "Address",
@@ -155,10 +169,6 @@ namespace SchoolMessengerAPI.Migrations
 
             migrationBuilder.DropColumn(
                 name: "CellPhone",
-                table: "Students");
-
-            migrationBuilder.DropColumn(
-                name: "ParentId",
                 table: "Students");
 
             migrationBuilder.DropColumn(

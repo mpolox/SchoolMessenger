@@ -4,7 +4,9 @@
     {
         public string StudentId { get; set;}
 
-        public ICollection<Parent> Parents { get; set; }
+
+        // Navigation Properties
+        public ICollection<ParentStudent>? ParentStudents { get; set; }
 
     }
 }

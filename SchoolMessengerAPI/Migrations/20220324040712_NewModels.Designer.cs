@@ -12,8 +12,8 @@ using SchoolMessengerAPI.Data;
 namespace SchoolMessengerAPI.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20220319204907_BasicModels")]
-    partial class BasicModels
+    [Migration("20220324040712_NewModels")]
+    partial class NewModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,10 @@ namespace SchoolMessengerAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -73,6 +77,29 @@ namespace SchoolMessengerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Parents");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.ParentStudent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ParentStudents");
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Room", b =>
@@ -132,9 +159,6 @@ namespace SchoolMessengerAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ParentName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -149,8 +173,6 @@ namespace SchoolMessengerAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Students");
                 });
@@ -237,16 +259,33 @@ namespace SchoolMessengerAPI.Migrations
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("SchoolMessengerAPI.Models.Student", b =>
+            modelBuilder.Entity("SchoolMessengerAPI.Models.ParentStudent", b =>
                 {
-                    b.HasOne("SchoolMessengerAPI.Models.Parent", null)
-                        .WithMany("Sons")
-                        .HasForeignKey("ParentId");
+                    b.HasOne("SchoolMessengerAPI.Models.Parent", "Parent")
+                        .WithMany("ParentStudents")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolMessengerAPI.Models.Student", "Student")
+                        .WithMany("ParentStudents")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Parent", b =>
                 {
-                    b.Navigation("Sons");
+                    b.Navigation("ParentStudents");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Student", b =>
+                {
+                    b.Navigation("ParentStudents");
                 });
 #pragma warning restore 612, 618
         }

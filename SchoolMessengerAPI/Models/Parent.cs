@@ -2,8 +2,10 @@
 {
     public class Parent : Person
     {
-        public ICollection<Student> Students { get; set; }
         public string Description { get; set; }
+
+        // Navigation Properties
+        public ICollection<ParentStudent>? ParentStudents { get; set; }
 
     }
 }

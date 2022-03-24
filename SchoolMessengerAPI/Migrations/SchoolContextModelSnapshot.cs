@@ -22,21 +22,6 @@ namespace SchoolMessengerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ParentStudent", b =>
-                {
-                    b.Property<int>("ParentsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ParentsId", "StudentsId");
-
-                    b.HasIndex("StudentsId");
-
-                    b.ToTable("ParentStudent");
-                });
-
             modelBuilder.Entity("SchoolMessengerAPI.Models.Parent", b =>
                 {
                     b.Property<int>("Id")
@@ -89,6 +74,29 @@ namespace SchoolMessengerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Parents");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.ParentStudent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ParentStudents");
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Room", b =>
@@ -248,19 +256,33 @@ namespace SchoolMessengerAPI.Migrations
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("ParentStudent", b =>
+            modelBuilder.Entity("SchoolMessengerAPI.Models.ParentStudent", b =>
                 {
-                    b.HasOne("SchoolMessengerAPI.Models.Parent", null)
-                        .WithMany()
-                        .HasForeignKey("ParentsId")
+                    b.HasOne("SchoolMessengerAPI.Models.Parent", "Parent")
+                        .WithMany("ParentStudents")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SchoolMessengerAPI.Models.Student", null)
-                        .WithMany()
-                        .HasForeignKey("StudentsId")
+                    b.HasOne("SchoolMessengerAPI.Models.Student", "Student")
+                        .WithMany("ParentStudents")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Parent", b =>
+                {
+                    b.Navigation("ParentStudents");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Student", b =>
+                {
+                    b.Navigation("ParentStudents");
                 });
 #pragma warning restore 612, 618
         }
