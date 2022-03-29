@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolMessengerAPI.Data;
+using SchoolMessengerAPI.Data.Interfaces;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,18 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SchoolContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SchoolMessengerDBConnection")));
-builder.Services.AddScoped<ISchoolRepo, SchoolRepo>();
-
-/*
- 
-builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("ProductsConnectionString")));
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
-
-*/
+builder.Services.AddScoped<IParentRepo, ParentRepo>();
+builder.Services.AddScoped<IStudentRepo, StudentRepo>();
+builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
 
 
 var app = builder.Build();
@@ -30,7 +23,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        //schemas
+        //options.DefaultModelsExpandDepth(-1);
+
+        //collapsed
+        options.DocExpansion(DocExpansion.None);    
+    });    
 }
 
 app.UseHttpsRedirection();

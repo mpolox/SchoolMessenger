@@ -8,5 +8,6 @@
         // Navigation Properties
         public ICollection<ParentStudent>? ParentStudents { get; set; }
 
+
     }
 }

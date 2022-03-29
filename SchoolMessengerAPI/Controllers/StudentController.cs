@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchoolMessengerAPI.Data;
+using SchoolMessengerAPI.Data.Interfaces;
 using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Controllers
@@ -8,17 +9,17 @@ namespace SchoolMessengerAPI.Controllers
     [Route("api/students")]
     public class StudentController : ControllerBase
     {
-        private readonly ISchoolRepo _repo;
+        private readonly IStudentRepo _repo;
 
-        public StudentController(ISchoolRepo repo)
+        public StudentController(IStudentRepo repo)
         {
             _repo = repo;
         }
 
         [HttpGet("GetById/{id}")]
-        public ActionResult<Student> GetStudentById(int id)
+        public async Task <ActionResult<Student>> GetStudentById(int id)
         {
-            var response = _repo.GetStudentById(id);
+            var response = await _repo.GetStudentById(id);
             if (response == null)
             {
                 return NotFound();
@@ -27,9 +28,9 @@ namespace SchoolMessengerAPI.Controllers
         }
 
         [HttpGet("GetAll")]
-        public ActionResult<IEnumerable<Student>> GetAllStudents()
+        public async Task<ActionResult<IEnumerable<Student>>> GetAllStudents()
         {
-            var response = _repo.GetStudents();
+            var response = await _repo.GetStudents();
             if (response == null || response.Count() ==  0)
             {
                 return NotFound();
@@ -38,23 +39,23 @@ namespace SchoolMessengerAPI.Controllers
         }
 
         [HttpPost("AddStudent")]
-        public ActionResult<Student> AddStudent(Student aStudent)
+        public async Task <ActionResult<Student>> AddStudent(Student aStudent)
         {
-            Student response = _repo.AddStudent(aStudent);
+            Student response = await _repo.AddStudent(aStudent);
             return Ok(response);
         }
 
         [HttpDelete("DeleteStudent")]
-        public ActionResult<bool> DeleteStudentById(int id)
+        public async Task <ActionResult<bool>> DeleteStudentById(int id)
         {
-            var response = _repo.DeleteStudentById(id); 
+            var response = await _repo.DeleteStudentById(id); 
             return Ok(response);
         }
 
         [HttpGet("GetByName/{aName}")]
-        public ActionResult<Student> GetStudetByName(string aName)
+        public async Task<ActionResult<Student>> GetStudetByName(string aName)
         {
-            var response = _repo.GetStudentByName(aName);
+            var response = await _repo.GetStudentByName(aName);
             if (response == null)
             {
                 return NotFound(aName);
@@ -63,9 +64,9 @@ namespace SchoolMessengerAPI.Controllers
         }
     
         [HttpGet("GetByParentId")]
-        public ActionResult<IEnumerable<Student>> GetByParentId(int id)
+        public async Task<ActionResult<IEnumerable<Student>>> GetByParentId(int id)
         {
-            var response = _repo.GetByParentId(id);
+            var response = await _repo.GetByParentId(id);
             if (response == null)
             {
                 return NotFound();

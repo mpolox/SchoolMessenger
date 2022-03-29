@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SchoolMessengerAPI.Data;
+using SchoolMessengerAPI.Data.Interfaces;
 using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Controllers
@@ -8,17 +9,17 @@ namespace SchoolMessengerAPI.Controllers
     [Route("api/parents")]
     public class ParentController : ControllerBase
     {
-        private readonly ISchoolRepo _repo;
+        private readonly IParentRepo _repo;
 
-        public ParentController(ISchoolRepo repo)
+        public ParentController(IParentRepo repo)
         {
             _repo = repo;
         }
 
         [HttpGet("GetById/{id}")]
-        public ActionResult<Parent> GetParentById(int id)   
+        public async Task<ActionResult<Parent>> GetParentById(int id)   
         {
-            var response = _repo.GetParentById(id);
+            var response = await _repo.GetParentById(id);
             if (response == null)
             {
                 return NotFound();
@@ -27,9 +28,9 @@ namespace SchoolMessengerAPI.Controllers
         }
 
         [HttpGet("GetAll")]
-        public ActionResult<IEnumerable<Parent>> GetAllParents()
+        public async Task<ActionResult<IEnumerable<Parent>>> GetAllParents()
         {
-            var response = _repo.GetParents();
+            var response = await _repo.GetParents();
             if (response == null || response.Count() == 0)
             {
                 return NotFound();
@@ -38,23 +39,23 @@ namespace SchoolMessengerAPI.Controllers
         }
 
         [HttpPost("AddParent")]
-        public ActionResult<Parent> AddParent(Parent aParent)
+        public async Task<ActionResult<Parent>> AddParent(Parent aParent)
         {
-            Parent response = _repo.AddParent(aParent);
+            Parent response = await _repo.AddParent(aParent);
             return Ok(response);
         }
 
         [HttpDelete("DeleteParent")]
-        public ActionResult<bool> DeleteParentById(int id)
+        public async Task<ActionResult<bool>> DeleteParentById(int id)
         {
-            var response = _repo.DeleteParenttById(id);
+            var response = await _repo.DeleteParenttById(id);
             return Ok(response);
         }
 
         [HttpGet("GetByName/{aName}")]
-        public ActionResult<Parent> GetParentByName(string aName)
+        public async Task <ActionResult<Parent>> GetParentByName(string aName)
         {
-            var response = _repo.GetParentByName(aName);
+            var response = await _repo.GetParentByName(aName);
             if (response == null)
             {
                 return NotFound(aName);

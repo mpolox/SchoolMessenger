@@ -1,4 +1,6 @@
-﻿using SchoolMessengerAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolMessengerAPI.Data.Interfaces;
+using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Data
 {
@@ -12,14 +14,14 @@ namespace SchoolMessengerAPI.Data
         }
 
         #region Students
-        public Student AddStudent(Student aStudent)
+        public async Task <Student> AddStudent(Student aStudent)
         {
-            _context.Students.Add(aStudent);            
-            _context.SaveChanges();
+            await _context.Students.AddAsync(aStudent);            
+            await _context.SaveChangesAsync();
             return (aStudent);
         }
 
-        public bool DeleteStudentById(int id)
+        public async Task <bool> DeleteStudentById(int id)
         {
             var myStudent = _context.Students.FirstOrDefault(x => x.Id == id);
             if (myStudent == null)
@@ -31,79 +33,79 @@ namespace SchoolMessengerAPI.Data
             return true;
         }
 
-        public Student GetStudentByEmail(string email)
+        public async Task <Student> GetStudentByEmail(string email)
         {
-            var response = _context.Students.FirstOrDefault(x => x.Email == email);
+            var response = await _context.Students.FirstOrDefaultAsync(x => x.Email == email);
             return response;
         }
 
-        public Student GetStudentById(int id)
+        public async Task <Student> GetStudentById(int id)
         {
-            var response = _context.Students.FirstOrDefault(x => x.Id == id);
+            var response = await _context.Students.FirstOrDefaultAsync(x => x.Id == id);
             return response;
         }
 
-        public IEnumerable<Student> GetStudentByName(string name)
+        public async Task <IEnumerable<Student>> GetStudentByName(string name)
         {
             var response = _context.Students.Where(x => x.FirstName == name).ToList();
             return response;
         }
 
-        public IEnumerable<Student> GetStudents()
+        public async Task<IEnumerable<Student>> GetStudents()
         {
-            var students = _context.Students.ToList();
+            var students = await _context.Students.ToListAsync();
             return students;
         }
 
-        public IEnumerable<Student> GetByParentId(int id)
+        public async Task<IEnumerable<Student>> GetByParentId(int id)
         {
             //var response = _context.Parents.Where(x => x.Id == id).Select(c => c.Students).FirstOrDefault();
-            var response = _context.ParentStudents.Where(x => x.Parent.Id == id).Select(s => s.Student).ToList();
+            var response = await _context.ParentStudents.Where(x => x.Parent.Id == id).Select(s => s.Student).ToListAsync();
             return response;
         }
         #endregion
 
         #region Parents
-        public Parent AddParent(Parent aParent)
+        public async Task<Parent> AddParent(Parent aParent)
         {
-            _context.Parents.Add(aParent);
-            _context.SaveChanges();
+            await _context.Parents.AddAsync(aParent);
+            await _context.SaveChangesAsync();
             return (aParent);
         }
 
-        public bool DeleteParenttById(int id)
+        public async Task<bool> DeleteParenttById(int id)
         {
-            var myParent = _context.Parents.FirstOrDefault(x => x.Id == id);
+            var myParent = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);
             if (myParent == null)
             {
                 return false;
             }
             _context.Remove(myParent);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public Parent GetParentByEmail(string email)
+        public async Task<Parent> GetParentByEmail(string email)
         {
-            var response = _context.Parents.FirstOrDefault(x => x.Email == email);
+            var response = await _context.Parents.FirstOrDefaultAsync(x => x.Email == email);
             return response;
         }
 
-        public Parent GetParentById(int id)
+        public async Task<Parent> GetParentById(int id)
         {
-            var response = _context.Parents.FirstOrDefault(x => x.Id == id);
+            var response = await _context.Parents.FirstOrDefaultAsync(x => x.Id == id);            
             return response;
         }
 
-        public IEnumerable<Parent> GetParentByName(string name)
+        public async Task <IEnumerable<Parent>> GetParentByName(string name)
         {
-            var response = _context.Parents.Where(x => x.FirstName == name).ToList();
+            var response = await _context.Parents.Where(x => x.FirstName == name).ToListAsync();
             return response;
         }
 
-        public IEnumerable<Parent> GetParents()
+        public async Task<IEnumerable<Parent>> GetParents()
         {
-            var response = _context.Parents.ToList();
+            var response = await _context.Parents.ToListAsync();
             return response;
         }
 

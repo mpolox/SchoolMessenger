@@ -1,4 +1,5 @@
-﻿using SchoolMessengerAPI.Models;
+﻿using SchoolMessengerAPI.Data.Interfaces;
+using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Data
 {
@@ -28,67 +29,12 @@ namespace SchoolMessengerAPI.Data
             StudentId = "clave3423423_2"
         };
 
-        public Parent AddParent(Parent aStudent)
+        public Task<Student> GetStudentById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Student AddStudent(Student aStudent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteParenttById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteStudentById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Student> GetByParentId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Parent GetParentByEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Parent GetParentById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Parent> GetParentByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Parent> GetParents()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Student GetStudentByEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Student GetStudentById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Student> GetStudentByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Student> GetStudents()
+        public Task<IEnumerable<Student>> GetStudents()
         {
             throw new NotImplementedException();
         }
