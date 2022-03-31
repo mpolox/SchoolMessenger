@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolMessengerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class NewModels : Migration
+    public partial class Parciales : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,36 @@ namespace SchoolMessengerAPI.Migrations
                 maxLength: 25,
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "StudentName",
+                table: "Students",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.CreateTable(
+                name: "Parciales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<float>(type: "real", nullable: false),
+                    Absence = table.Column<int>(type: "int", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parciales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parciales_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Parents",
@@ -76,9 +106,10 @@ namespace SchoolMessengerAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Credits = table.Column<int>(type: "int", nullable: false)
+                    Credits = table.Column<int>(type: "int", nullable: false),
+                    ShortName = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,6 +166,11 @@ namespace SchoolMessengerAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Parciales_StudentId",
+                table: "Parciales",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ParentStudents_ParentId",
                 table: "ParentStudents",
                 column: "ParentId");
@@ -148,6 +184,9 @@ namespace SchoolMessengerAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Parciales");
+
             migrationBuilder.DropTable(
                 name: "ParentStudents");
 
@@ -173,6 +212,10 @@ namespace SchoolMessengerAPI.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Phone",
+                table: "Students");
+
+            migrationBuilder.DropColumn(
+                name: "StudentName",
                 table: "Students");
         }
     }

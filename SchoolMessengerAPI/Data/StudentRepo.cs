@@ -63,6 +63,12 @@ namespace SchoolMessengerAPI.Data
             var response = await _context.ParentStudents.Where(x => x.Parent.Id == id).Select(s => s.Student).ToListAsync();
             return response;
         }
+
+        public async Task<IEnumerable<Parcial>> GetParcialesByStudentId(int id)
+        {
+            var result = _context.Students.Where(x => x.Id == id).Select(s => s.Parciales).FirstOrDefaultAsync().Result;
+            return result;
+        }
         #endregion
     }
 }

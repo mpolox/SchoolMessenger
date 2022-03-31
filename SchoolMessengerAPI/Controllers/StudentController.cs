@@ -73,5 +73,17 @@ namespace SchoolMessengerAPI.Controllers
             }
             return Ok(response);
         }
+
+        [HttpGet("GetParcialesByStudentId")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetParcialesByStudentId(int id)
+        {
+            var response = await _repo.GetParcialesByStudentId(id);
+            if (response == null)
+            {       
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
     }
 }

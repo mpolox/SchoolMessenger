@@ -22,6 +22,37 @@ namespace SchoolMessengerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Parcial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Absence")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Grade")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Parciales");
+                });
+
             modelBuilder.Entity("SchoolMessengerAPI.Models.Parent", b =>
                 {
                     b.Property<int>("Id")
@@ -169,6 +200,10 @@ namespace SchoolMessengerAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StudentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Students");
@@ -262,6 +297,17 @@ namespace SchoolMessengerAPI.Migrations
                     b.ToTable("Teachers");
                 });
 
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Parcial", b =>
+                {
+                    b.HasOne("SchoolMessengerAPI.Models.Student", "Student")
+                        .WithMany("Parciales")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("SchoolMessengerAPI.Models.ParentStudent", b =>
                 {
                     b.HasOne("SchoolMessengerAPI.Models.Parent", "Parent")
@@ -288,6 +334,8 @@ namespace SchoolMessengerAPI.Migrations
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Student", b =>
                 {
+                    b.Navigation("Parciales");
+
                     b.Navigation("ParentStudents");
                 });
 #pragma warning restore 612, 618
