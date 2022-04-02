@@ -11,5 +11,8 @@
         // Navigational Properties
         public int StudentId { get; set; }
         public Student Student { get; set; }
+        public int ClaseId { get; set; }
+        public Clase Clases { get; set; }
+
     }
 }

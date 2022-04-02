@@ -17,6 +17,6 @@ namespace SchoolMessengerAPI.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<ParentStudent> ParentStudents { get; set; }
         public DbSet<Parcial> Parciales { get; set; }
-
+        public DbSet<Clase> Clases { get; set; }
     }
 }

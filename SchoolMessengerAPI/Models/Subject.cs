@@ -17,5 +17,7 @@ namespace SchoolMessengerAPI.Models
         [Required]
         [MaxLength(10)]
         public string ShortName { get; set; }
+
+        public List<Clase> Clases { get; set; }
     }
 }

@@ -6,64 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SchoolMessengerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Parciales : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Address",
-                table: "Students",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "CellPhone",
-                table: "Students",
-                type: "nvarchar(25)",
-                maxLength: 25,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Phone",
-                table: "Students",
-                type: "nvarchar(25)",
-                maxLength: 25,
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<string>(
-                name: "StudentName",
-                table: "Students",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.CreateTable(
-                name: "Parciales",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<float>(type: "real", nullable: false),
-                    Absence = table.Column<int>(type: "int", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StudentId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Parciales", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Parciales_Students_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "Students",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Parents",
                 columns: table => new
@@ -98,6 +45,29 @@ namespace SchoolMessengerAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ParentName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MotherName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Curp = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CellPhone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -165,6 +135,78 @@ namespace SchoolMessengerAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Clases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    SubjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Clases_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Clases_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Parciales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<float>(type: "real", nullable: false),
+                    Absence = table.Column<int>(type: "int", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    ClaseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parciales", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parciales_Clases_ClaseId",
+                        column: x => x.ClaseId,
+                        principalTable: "Clases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Parciales_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clases_RoomId",
+                table: "Clases",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clases_SubjectId",
+                table: "Clases",
+                column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parciales_ClaseId",
+                table: "Parciales",
+                column: "ClaseId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Parciales_StudentId",
                 table: "Parciales",
@@ -191,32 +233,22 @@ namespace SchoolMessengerAPI.Migrations
                 name: "ParentStudents");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
-
-            migrationBuilder.DropTable(
-                name: "Subjects");
-
-            migrationBuilder.DropTable(
                 name: "Teachers");
+
+            migrationBuilder.DropTable(
+                name: "Clases");
 
             migrationBuilder.DropTable(
                 name: "Parents");
 
-            migrationBuilder.DropColumn(
-                name: "Address",
-                table: "Students");
+            migrationBuilder.DropTable(
+                name: "Students");
 
-            migrationBuilder.DropColumn(
-                name: "CellPhone",
-                table: "Students");
+            migrationBuilder.DropTable(
+                name: "Rooms");
 
-            migrationBuilder.DropColumn(
-                name: "Phone",
-                table: "Students");
-
-            migrationBuilder.DropColumn(
-                name: "StudentName",
-                table: "Students");
+            migrationBuilder.DropTable(
+                name: "Subjects");
         }
     }
 }

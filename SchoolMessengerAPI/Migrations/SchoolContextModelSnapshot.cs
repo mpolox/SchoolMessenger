@@ -22,6 +22,33 @@ namespace SchoolMessengerAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Clase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Clases");
+                });
+
             modelBuilder.Entity("SchoolMessengerAPI.Models.Parcial", b =>
                 {
                     b.Property<int>("Id")
@@ -31,6 +58,9 @@ namespace SchoolMessengerAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Absence")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClaseId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comments")
@@ -47,6 +77,8 @@ namespace SchoolMessengerAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClaseId");
 
                     b.HasIndex("StudentId");
 
@@ -297,13 +329,40 @@ namespace SchoolMessengerAPI.Migrations
                     b.ToTable("Teachers");
                 });
 
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Clase", b =>
+                {
+                    b.HasOne("SchoolMessengerAPI.Models.Room", "Room")
+                        .WithMany("Clases")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolMessengerAPI.Models.Subject", "Subject")
+                        .WithMany("Clases")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
+
+                    b.Navigation("Subject");
+                });
+
             modelBuilder.Entity("SchoolMessengerAPI.Models.Parcial", b =>
                 {
+                    b.HasOne("SchoolMessengerAPI.Models.Clase", "Clases")
+                        .WithMany("Parciales")
+                        .HasForeignKey("ClaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SchoolMessengerAPI.Models.Student", "Student")
                         .WithMany("Parciales")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Clases");
 
                     b.Navigation("Student");
                 });
@@ -327,9 +386,19 @@ namespace SchoolMessengerAPI.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Clase", b =>
+                {
+                    b.Navigation("Parciales");
+                });
+
             modelBuilder.Entity("SchoolMessengerAPI.Models.Parent", b =>
                 {
                     b.Navigation("ParentStudents");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Room", b =>
+                {
+                    b.Navigation("Clases");
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Student", b =>
@@ -337,6 +406,11 @@ namespace SchoolMessengerAPI.Migrations
                     b.Navigation("Parciales");
 
                     b.Navigation("ParentStudents");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Subject", b =>
+                {
+                    b.Navigation("Clases");
                 });
 #pragma warning restore 612, 618
         }
