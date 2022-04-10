@@ -1,9 +1,10 @@
 ﻿namespace SchoolMessengerAPI.Models
 {
-    public class ParentStudent
+    public class ClaseStudent
     {
         public int Id { get; set; }
-        public Parent Parent { get; set; }
+        public string Descripcion { get; set; }
+        public Clase Clase { get; set; }
         public Student Student { get; set; }
     }
 }

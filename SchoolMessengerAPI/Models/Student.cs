@@ -10,5 +10,7 @@
         public List<ParentStudent>? ParentStudents { get; set; }
 
         public List<Parcial> Parciales { get; set; }
+
+        public List<ClaseStudent> ClaseStudents { get; set; }
     }
 }

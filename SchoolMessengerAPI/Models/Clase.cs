@@ -12,7 +12,6 @@
         public List<Parcial> Parciales { get; set; }
         public Room Room { get; set; }
         public Subject Subject { get; set; }
-
-
+        public List<ClaseStudent> ClaseStudents { get; set; }
     }
 }
