@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SchoolMessengerAPI.Data.Interfaces;
+using SchoolMessengerAPI.Dtos;
+using SchoolMessengerAPI.Dtos.Read;
 using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Controllers
@@ -9,10 +12,12 @@ namespace SchoolMessengerAPI.Controllers
     public class ClasesController : ControllerBase
     {
         private readonly IClasesRepo _repo;
+        private readonly IMapper _mapper;
 
-        public ClasesController(IClasesRepo repo)
+        public ClasesController(IClasesRepo repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpGet("GetById/{id}")]
@@ -52,6 +57,29 @@ namespace SchoolMessengerAPI.Controllers
         public async Task<ActionResult<IEnumerable<Student>>> GetByStudentId(int id)
         {
             var response = await _repo.GetClasesByStudentId(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("GetByStudentName/{studentName}")]
+        public async Task<ActionResult<IEnumerable<ClaseDto>>> GetByStudentName(string studentName="Marcopolo")
+        {
+            var response = await _repo.GetClaseaByStudentName(studentName);
+            //var myResponse2 = _mapper.Map<IEnumerable<ClaseDto>>(response);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("GetByStudentMatricula/{matricula}")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetClasesByStudentMatricula(string matricula)
+        {
+            var response = await _repo.GetClasesByStudentMatricula(matricula);
             if (response == null)
             {
                 return NotFound();

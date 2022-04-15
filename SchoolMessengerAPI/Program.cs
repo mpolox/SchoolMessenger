@@ -17,6 +17,9 @@ builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
 builder.Services.AddScoped<IClasesRepo, ClaseRepo>();
 
+//Automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 var app = builder.Build();
 

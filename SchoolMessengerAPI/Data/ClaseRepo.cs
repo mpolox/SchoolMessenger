@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SchoolMessengerAPI.Data.Interfaces;
+using SchoolMessengerAPI.Dtos;
 using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Data
@@ -8,14 +10,35 @@ namespace SchoolMessengerAPI.Data
 
     {
         private readonly SchoolContext _context;
+        private readonly IMapper _mapper;
 
         public ClaseRepo()
         {
         }
 
-        public ClaseRepo(SchoolContext  context)
+        public ClaseRepo(SchoolContext  context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<ClaseDto>> GetClaseaByStudentName(string studentName)
+        {;
+
+            var response = await (from cs in _context.ClaseStudents
+                                   join c in _context.Clases
+                                   on cs.Clase.Id equals c.Id
+                                   join s in _context.Students
+                                   on cs.Student.Id equals s.Id
+                                   where s.FirstName == studentName
+                                   select ( new ClaseDto
+                                   {
+                                       Description = c.Description,
+                                       Materia = c.Subject.Name,
+                                       Salon = c.Room.Name
+                                   })).ToListAsync();
+
+            return response;
         }
 
         public async Task<IEnumerable<Clase>> GetClaseByCredit(int credits)
@@ -48,7 +71,6 @@ namespace SchoolMessengerAPI.Data
                      ).ToListAsync();
 
             return response;
-
         }
 
         public async Task<IEnumerable<Clase>> GetClases()
@@ -59,24 +81,25 @@ namespace SchoolMessengerAPI.Data
 
         public async Task<IEnumerable<Clase>> GetClasesByStudentId(int studentId)
         {
-            string name = "Marcopolo";
-
             var response = await (from cs in _context.ClaseStudents
                                   join c in _context.Clases
                                   on cs.Clase.Id equals c.Id
                                   join s in _context.Students
                                   on cs.Student.Id equals s.Id
-                                  where s.FirstName == name
+                                  where s.Id == studentId
                                   select c).ToListAsync();
+            return response;
+        }
 
-            //var response =  await (from parcial in _context.Parciales
-            //                     join clase in _context.Clases
-            //                     on parcial.ClaseId equals clase.Id
-            //                     join student in _context.Students
-            //                     on parcial.StudentId equals student.Id
-            //                     where student.FirstName == name
-            //                     select clase).ToListAsync();
-
+        public async Task<IEnumerable<Clase>> GetClasesByStudentMatricula(string matricula)
+        {
+            var response = await(from cs in _context.ClaseStudents
+                                 join c in _context.Clases
+                                 on cs.Clase.Id equals c.Id
+                                 join s in _context.Students
+                                 on cs.Student.Id equals s.Id
+                                 where s.StudentId == matricula
+                                 select c).ToListAsync();
             return response;
         }
 
@@ -95,36 +118,6 @@ namespace SchoolMessengerAPI.Data
                 }).Distinct().ToListAsync();
                 
 
-            //var query = context.Customers
-            //    .Join(
-            //        context.Invoices,
-            //        customer => customer.CustomerId,
-            //        invoice => invoice.Customer.CustomerId,
-            //        (customer, invoice) => new
-            //        {
-            //            InvoiceID = invoice.Id,
-            //            CustomerName = customer.FirstName + "" + customer.LastName,
-            //            InvoiceDate = invoice.Date
-            //        }
-            //    ).ToList();
-
-            //var myResponse =  await _context.Parciales
-            //    .Join(_context.Students,   p => p.StudentId,     s => s.Id, (p, s) => new { p, s })
-            //    .Join(_context.Clases, f => f.p.ClaseId, c => c.Id, (f, c) => new { f, c })
-            //    .Where( v => v.c.Description == "Mate 1")
-            //    .Select(m => new Student
-            //    { 
-            //        FirstName  = m.f.s.FirstName,
-            //        ParentName = m.f.s.ParentName,
-            //        Address = String.Empty,
-            //        Birthday = m.f.s.Birthday,
-            //        CellPhone = String.Empty,
-            //        Curp = String.Empty,
-            //        Email = String.Empty,
-            //        MotherName =String.Empty,
-            //        Phone = String.Empty,
-            //    }).Distinct().ToListAsync();
-            //return myResponse;
             return null;
         }
 
