@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolMessengerAPI.Data;
 using SchoolMessengerAPI.Data.Interfaces;
+using SchoolMessengerAPI.Initialize;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,8 +30,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        //schemas
-        //options.DefaultModelsExpandDepth(-1);
+        //hide schemas
+        options.DefaultModelsExpandDepth(-1);
 
         //collapsed
         options.DocExpansion(DocExpansion.None);    
@@ -43,4 +44,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+AppDbInitializer.Seed(app);
+
 app.Run();
+

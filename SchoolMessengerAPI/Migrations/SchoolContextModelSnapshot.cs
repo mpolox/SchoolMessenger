@@ -40,11 +40,16 @@ namespace SchoolMessengerAPI.Migrations
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Clases");
                 });
@@ -208,6 +213,14 @@ namespace SchoolMessengerAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Rooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Salon 01",
+                            Number = 1
+                        });
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Student", b =>
@@ -370,9 +383,17 @@ namespace SchoolMessengerAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SchoolMessengerAPI.Models.Teacher", "Teacher")
+                        .WithMany("Clases")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Room");
 
                     b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.ClaseStudent", b =>
@@ -459,6 +480,11 @@ namespace SchoolMessengerAPI.Migrations
                 });
 
             modelBuilder.Entity("SchoolMessengerAPI.Models.Subject", b =>
+                {
+                    b.Navigation("Clases");
+                });
+
+            modelBuilder.Entity("SchoolMessengerAPI.Models.Teacher", b =>
                 {
                     b.Navigation("Clases");
                 });

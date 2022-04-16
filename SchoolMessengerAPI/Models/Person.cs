@@ -12,22 +12,22 @@ namespace SchoolMessengerAPI.Models
         [Required]
         public string ParentName { get; set; }
 
-        public string MotherName { get; set; }
+        public string MotherName { get; set; } = "Person's Mothername";
 
-        public DateTime Birthday { get; set; } = DateTime.MinValue;
+        public DateTime Birthday { get; set; } = DateTime.UtcNow;
         
-        public string Curp { get; set; } = "";
+        public string Curp { get; set; } = "Person's CURP";
 
         [Required]
         public string Email { get; set; }
 
         [MaxLength(25)]
-        public string CellPhone { get; set; }
+        public string CellPhone { get; set; } = "Person's Cellphone";
 
         [MaxLength(25)]
-        public string Phone { get; set; }
+        public string Phone { get; set; } = "Person's Phone";
 
-        public string Address { get; set; }
+        public string Address { get; set; } = "Person's Address";
 
     }
 }

@@ -143,7 +143,8 @@ namespace SchoolMessengerAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false),
-                    SubjectId = table.Column<int>(type: "int", nullable: false)
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    TeacherId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,6 +159,39 @@ namespace SchoolMessengerAPI.Migrations
                         name: "FK_Clases_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Clases_Teachers_TeacherId",
+                        column: x => x.TeacherId,
+                        principalTable: "Teachers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClaseStudents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClaseId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClaseStudents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClaseStudents_Clases_ClaseId",
+                        column: x => x.ClaseId,
+                        principalTable: "Clases",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClaseStudents_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -203,6 +237,21 @@ namespace SchoolMessengerAPI.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clases_TeacherId",
+                table: "Clases",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClaseStudents_ClaseId",
+                table: "ClaseStudents",
+                column: "ClaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClaseStudents_StudentId",
+                table: "ClaseStudents",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Parciales_ClaseId",
                 table: "Parciales",
                 column: "ClaseId");
@@ -227,13 +276,13 @@ namespace SchoolMessengerAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ClaseStudents");
+
+            migrationBuilder.DropTable(
                 name: "Parciales");
 
             migrationBuilder.DropTable(
                 name: "ParentStudents");
-
-            migrationBuilder.DropTable(
-                name: "Teachers");
 
             migrationBuilder.DropTable(
                 name: "Clases");
@@ -249,6 +298,9 @@ namespace SchoolMessengerAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Subjects");
+
+            migrationBuilder.DropTable(
+                name: "Teachers");
         }
     }
 }

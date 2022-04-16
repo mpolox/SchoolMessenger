@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolMessengerAPI.Data.Interfaces;
 using SchoolMessengerAPI.Dtos;
+using SchoolMessengerAPI.Dtos.Read;
 using SchoolMessengerAPI.Models;
 
 namespace SchoolMessengerAPI.Data
@@ -22,8 +23,8 @@ namespace SchoolMessengerAPI.Data
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ClaseDto>> GetClaseaByStudentName(string studentName)
-        {;
+        public async Task<IEnumerable<ClaseDtoR>> GetClaseaByStudentName(string studentName)
+        {
 
             var response = await (from cs in _context.ClaseStudents
                                    join c in _context.Clases
@@ -38,7 +39,7 @@ namespace SchoolMessengerAPI.Data
                                        Salon = c.Room.Name
                                    })).ToListAsync();
 
-            return response;
+            return null;
         }
 
         public async Task<IEnumerable<Clase>> GetClaseByCredit(int credits)
@@ -101,6 +102,18 @@ namespace SchoolMessengerAPI.Data
                                  where s.StudentId == matricula
                                  select c).ToListAsync();
             return response;
+        }
+
+        public async Task<IEnumerable<ClaseDtoR>> GetClasesByTeacherId(int id)
+        {
+            //var response = await(from cs in _context.ClaseStudents
+            //                     join c in _context.Clases
+            //                     on cs.Clase.Id equals c.Id
+            //                     join s in _context.Students
+            //                     on cs.Student.Id equals s.Id
+            //                     where s.Id == id
+            //                     select c).ToListAsync();
+            return null;
         }
 
         public async Task<IEnumerable<Student>> GetClasesByX()

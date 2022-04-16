@@ -2,7 +2,8 @@
 {
     public class ClaseDtoR
     {
-        public int Id { get; set; }
         public string Description { get; set; } = string.Empty;
+        public string Salon { get; set; }
+        public string Materia { get; set; }
     }
 }
