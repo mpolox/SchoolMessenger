@@ -10,7 +10,9 @@
 
         // Nav propierties
         public List<Parcial> Parciales { get; set; }
+        public int RoomId { get; set; }
         public Room Room { get; set; }
+        public int SubjectId { get; set; }
         public Subject Subject { get; set; }
         public List<ClaseStudent> ClaseStudents { get; set; }
         public Teacher Teacher { get; set; }

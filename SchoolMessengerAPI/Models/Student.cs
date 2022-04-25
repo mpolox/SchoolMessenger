@@ -4,7 +4,7 @@
     {
         public string StudentId { get; set;}
 
-        public string StudentName { get; set;}
+        public string Details { get; set;}
 
         // Navigation Properties
         public List<ParentStudent>? ParentStudents { get; set; }

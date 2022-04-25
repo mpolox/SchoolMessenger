@@ -87,5 +87,15 @@ namespace SchoolMessengerAPI.Controllers
             return Ok(response);
         }
 
+        [HttpGet("GetClases")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetClases()
+        {
+            var response = await _repo.GetClases();
+            if (response == null || !response.Any() )
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
     }
 }
