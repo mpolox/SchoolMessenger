@@ -1,7 +1,7 @@
 ﻿namespace SchoolMessengerAPI.Models
 {
     /// <summary>
-    /// Esta es la clase ej  MateI de 8 a 9 en el salon x
+    /// Esta es la clase ej  Mate I de 8 a 9 en el salon x
     /// </summary>
     public class Clase
     {

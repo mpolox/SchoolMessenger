@@ -23,7 +23,7 @@ namespace SchoolMessengerAPI.Controllers
         [HttpGet("GetById/{id}")]
         public async Task<ActionResult<IEnumerable<Student>>> GetClaseById(int id)
         {
-            var response = await _repo.GetClasesByX();
+            var response = await _repo.GetClaseById(id);
             if (response == null)
             {
                 return NotFound();
@@ -65,10 +65,9 @@ namespace SchoolMessengerAPI.Controllers
         }
 
         [HttpGet("GetByStudentName/{studentName}")]
-        public async Task<ActionResult<IEnumerable<ClaseDto>>> GetByStudentName(string studentName="Marcopolo")
+        public async Task<ActionResult<IEnumerable<ClaseDtoR>>> GetByStudentName(string studentName="Marcopolo")
         {
             var response = await _repo.GetClaseaByStudentName(studentName);
-            //var myResponse2 = _mapper.Map<IEnumerable<ClaseDto>>(response);
             if (response == null)
             {
                 return NotFound();
@@ -88,10 +87,32 @@ namespace SchoolMessengerAPI.Controllers
         }
 
         [HttpGet("GetClases")]
-        public async Task<ActionResult<IEnumerable<Student>>> GetClases()
+        public async Task<ActionResult<IEnumerable<ClaseDtoR>>> GetClases()
         {
             var response = await _repo.GetClases();
             if (response == null || !response.Any() )
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("GetByTeacherId/{id}")]
+        public async Task<ActionResult<IEnumerable<ClaseDtoR>>> GetByTeacherId(int id = 1)
+        {
+            var response = await _repo.GetClasesByTeacherId(id);
+            if (response == null || !response.Any())
+            {
+                return NotFound();
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("GetByTeacherName/{name}")]
+        public async Task<ActionResult<IEnumerable<ClaseDtoR>>> GetByTeacherName(string name = "Teacher Name 01")
+        {
+            var response = await _repo.GetClasesByTeacherName(name);
+            if (response == null || !response.Any())
             {
                 return NotFound();
             }

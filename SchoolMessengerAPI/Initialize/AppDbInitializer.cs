@@ -129,8 +129,77 @@ namespace SchoolMessengerAPI.Initialize
                     context.ParentStudents.AddRange(myParentStudents);
                     context.SaveChanges();
                 }
+                if (!context.Clases.Any())
+                {
+                    var myRooms = context.Rooms.ToList();
+                    var mySubjects = context.Subjects.ToList();
+                    var myStudents = context.Students.ToList();
+                    var myTeachers = context.Teachers.ToList();
 
+                    List<Clase> myClases = new List<Clase>()
+                    {
+                        new Clase() { Description = "Clase 01", Room = myRooms[0], RoomId = myRooms[0].Id, Subject = mySubjects[0], SubjectId = mySubjects[0].Id, Teacher=myTeachers[0] },
+                        new Clase() { Description = "Clase 02", Room = myRooms[1], RoomId = myRooms[1].Id, Subject = mySubjects[1], SubjectId = mySubjects[1].Id, Teacher=myTeachers[1] },
+                        new Clase() { Description = "Clase 03", Room = myRooms[1], RoomId = myRooms[1].Id, Subject = mySubjects[2], SubjectId = mySubjects[2].Id, Teacher=myTeachers[2] },
+                        new Clase() { Description = "Clase 04", Room = myRooms[2], RoomId = myRooms[2].Id, Subject = mySubjects[3], SubjectId = mySubjects[3].Id, Teacher=myTeachers[3] },
+                        new Clase() { Description = "Clase 05", Room = myRooms[2], RoomId = myRooms[2].Id, Subject = mySubjects[4], SubjectId = mySubjects[4].Id, Teacher=myTeachers[4] },
+                        new Clase() { Description = "Clase 06", Room = myRooms[3], RoomId = myRooms[3].Id, Subject = mySubjects[5], SubjectId = mySubjects[5].Id, Teacher=myTeachers[5] },
+                        new Clase() { Description = "Clase 07", Room = myRooms[3], RoomId = myRooms[3].Id, Subject = mySubjects[6], SubjectId = mySubjects[6].Id, Teacher=myTeachers[6] },
+                        new Clase() { Description = "Clase 08", Room = myRooms[4], RoomId = myRooms[4].Id, Subject = mySubjects[7], SubjectId = mySubjects[7].Id, Teacher=myTeachers[7] },
+                        new Clase() { Description = "Clase 09", Room = myRooms[4], RoomId = myRooms[4].Id, Subject = mySubjects[8], SubjectId = mySubjects[8].Id, Teacher=myTeachers[8] },
+                        new Clase() { Description = "Clase 10", Room = myRooms[5], RoomId = myRooms[5].Id, Subject = mySubjects[9], SubjectId = mySubjects[9].Id, Teacher=myTeachers[9] }
+                    };
+                    context.Clases.AddRange(myClases);
+                    context.SaveChanges();
+                }
+                if (!context.ClaseStudents.Any())
+                {
+                    var myStudents = context.Students.ToList();
+                    var myClases = context.Clases.ToList();
 
+                    List<ClaseStudent> myClasesStudents = new List<ClaseStudent>()
+                    {
+                        new ClaseStudent() { Clase = myClases[0], Student = myStudents[0], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[0], Student = myStudents[1], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[0], Student = myStudents[2], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[0], Student = myStudents[3], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[1], Student = myStudents[4], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[1], Student = myStudents[5], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[1], Student = myStudents[0], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[2], Student = myStudents[1], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[2], Student = myStudents[2], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[3], Student = myStudents[3], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[3], Student = myStudents[4], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[3], Student = myStudents[5], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[4], Student = myStudents[6], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[4], Student = myStudents[7], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[4], Student = myStudents[8], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[4], Student = myStudents[9], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[4], Student = myStudents[0], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[4], Student = myStudents[1], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[5], Student = myStudents[2], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[5], Student = myStudents[3], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[6], Student = myStudents[4], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[6], Student = myStudents[5], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[6], Student = myStudents[6], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[6], Student = myStudents[7], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[8], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[9], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[0], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[1], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[2], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[3], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[7], Student = myStudents[4], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[8], Student = myStudents[5], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[8], Student = myStudents[6], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[9], Student = myStudents[7], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[9], Student = myStudents[8], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[9], Student = myStudents[9], Descripcion = "Clase Student" },
+                        new ClaseStudent() { Clase = myClases[9], Student = myStudents[0], Descripcion = "Clase Student" }
+                    };
+                    context.ClaseStudents.AddRange(myClasesStudents);
+                    context.SaveChanges();
+                }
             }
         }
     }

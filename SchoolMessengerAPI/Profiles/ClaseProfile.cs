@@ -9,7 +9,9 @@ namespace SchoolMessengerAPI.Profiles
     {
         public ClaseProfile()
         {
-            CreateMap<Clase, ClaseDtoR>();
+            CreateMap<Clase, ClaseDtoR>()
+                .ForMember(dest => dest.Materia, o => o.MapFrom(src => src.Subject.Name))
+                .ForMember(dest => dest.Salon, o => o.MapFrom(src => src.Room.Name));
         }
     }
 }

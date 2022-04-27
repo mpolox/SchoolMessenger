@@ -23,7 +23,7 @@ namespace SchoolMessengerAPI.Data
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ClaseDtoR>> GetClaseaByStudentName(string studentName)
+        public async Task<IEnumerable<ClaseDtoR>> GetClaseaByStudentName(string studentName)        
         {
 
             var response = await (from cs in _context.ClaseStudents
@@ -32,55 +32,72 @@ namespace SchoolMessengerAPI.Data
                                    join s in _context.Students
                                    on cs.Student.Id equals s.Id
                                    where s.FirstName == studentName
-                                   select ( new ClaseDto
+                                   select ( new ClaseDtoR
                                    {
                                        Description = c.Description,
                                        Materia = c.Subject.Name,
                                        Salon = c.Room.Name
                                    })).ToListAsync();
 
-            return null;
-        }
-
-        public async Task<IEnumerable<Clase>> GetClaseByCredit(int credits)
-        {
-            var response = await _context.Clases
-                .Join(_context.Subjects, c => c.Subject.Id, s => s.Id, (c,s) => new {c,s})
-                .Where(c => c.s.Credits == credits)
-                .Select(c => new Clase
-                {
-                    Description = c.c.Description,
-                    Parciales = c.c.Parciales
-                })
-                .ToListAsync();
-
             return response;
         }
 
-        public Task<Clase> GetClaseById(int id)
+        public async Task<IEnumerable<ClaseDtoR>> GetClaseByCredit(int credits)
         {
-            throw new NotImplementedException();
-        }
 
-        public async Task<IEnumerable<Clase>> GetClaseByShortName(string shortName)
-        {
-            var response = await (from subject in _context.Subjects
-                     join clase in _context.Clases
-                     on subject.Id equals clase.Subject.Id
-                     where subject.ShortName == shortName
-                     select clase
-                     ).ToListAsync();
-
+            var response = await (from c in _context.Clases
+                                  join s in _context.Subjects
+                                  on c.SubjectId equals s.Id
+                                  where s.Credits == credits
+                                  select (new ClaseDtoR
+                                  {
+                                      Description = c.Description,
+                                      Materia = c.Subject.Name,
+                                      Salon = c.Room.Name
+                                  })).ToListAsync();
             return response;
         }
 
-        public async Task<IEnumerable<Clase>> GetClases()
+        public async Task<ClaseDtoR> GetClaseById(int id)
         {
-            var response = await _context.Clases.ToListAsync();
+            var response = await (from c in _context.Clases
+                                  where c.Id == id
+                                  select (new ClaseDtoR
+                                  {
+                                      Description = c.Description,
+                                      Materia = c.Subject.Name,
+                                      Salon = c.Room.Name
+                                  })).FirstOrDefaultAsync();
             return response;
         }
 
-        public async Task<IEnumerable<Clase>> GetClasesByStudentId(int studentId)
+        public async Task<IEnumerable<ClaseDtoR>> GetClaseByShortName(string shortName)
+        {
+            var response = await (from s in _context.Subjects
+                                  join c in _context.Clases
+                                  on s.Id equals c.SubjectId
+                                  where s.ShortName == shortName
+                                  select (new ClaseDtoR
+                                  {
+                                      Description = c.Description,
+                                      Materia = c.Subject.Name,
+                                      Salon = c.Room.Name
+                                  })).ToListAsync();
+            return response;
+        }
+
+        public async Task<IEnumerable<ClaseDtoR>> GetClases()
+        {
+            var response = await _context.Clases.Select(c => new ClaseDtoR
+            {
+                Description = c.Description,
+                Materia = c.Subject.Name,
+                Salon = c.Room.Name
+            }).ToListAsync();
+            return response;
+        }
+
+        public async Task<IEnumerable<ClaseDtoR>> GetClasesByStudentId(int studentId)
         {
             var response = await (from cs in _context.ClaseStudents
                                   join c in _context.Clases
@@ -88,11 +105,16 @@ namespace SchoolMessengerAPI.Data
                                   join s in _context.Students
                                   on cs.Student.Id equals s.Id
                                   where s.Id == studentId
-                                  select c).ToListAsync();
+                                  select (new ClaseDtoR
+                                  {
+                                      Description= c.Description,   
+                                      Materia = c.Subject.Name,
+                                      Salon = c.Room.Name
+                                  })).ToListAsync();
             return response;
         }
 
-        public async Task<IEnumerable<Clase>> GetClasesByStudentMatricula(string matricula)
+        public async Task<IEnumerable<ClaseDtoR>> GetClasesByStudentMatricula(string matricula)
         {
             var response = await(from cs in _context.ClaseStudents
                                  join c in _context.Clases
@@ -100,38 +122,71 @@ namespace SchoolMessengerAPI.Data
                                  join s in _context.Students
                                  on cs.Student.Id equals s.Id
                                  where s.StudentId == matricula
-                                 select c).ToListAsync();
+                                 select ( new ClaseDtoR
+                                 {
+                                     Description = c.Description,
+                                     Materia = c.Subject.Name,  
+                                     Salon = c.Room.Name
+                                 })).ToListAsync();
             return response;
         }
 
         public async Task<IEnumerable<ClaseDtoR>> GetClasesByTeacherId(int id)
         {
-            //var response = await(from cs in _context.ClaseStudents
-            //                     join c in _context.Clases
-            //                     on cs.Clase.Id equals c.Id
-            //                     join s in _context.Students
-            //                     on cs.Student.Id equals s.Id
-            //                     where s.Id == id
-            //                     select c).ToListAsync();
-            return null;
+            var response = await (from t in _context.Teachers
+                                  join c in _context.Clases
+                                  on t.Id equals c.TeacherId
+                                  where t.Id == id
+                                  select (new ClaseDtoR
+                                  {
+                                      Description = c.Description,
+                                      Materia = c.Subject.Name,
+                                      Salon = c.Room.Name
+                                  })).ToListAsync();
+
+            return response;
         }
 
-        public async Task<IEnumerable<Student>> GetClasesByX()
+        public async Task<IEnumerable<ClaseDtoR>> GetClasesByTeacherName(string teacherName)
         {
 
-            var response = await _context.Parciales
-                .Join(_context.Students, par => par.StudentId, stud => stud.Id,
-                (par, stud) => new { par, stud })
-                .Join(_context.Clases, a => a.par.ClaseId, b => b.Id,
-                (a, b) => new { a, b })
-                .Where(q => q.b.Description == "Mate 1")
-                .Select(sel => new Student
-                {
-                    FirstName = sel.a.stud.FirstName
-                }).Distinct().ToListAsync();
-                
+            //var resp = await (from t in _context.Teachers
+            //                  join c in _context.Clases
+            //                  on t.Id equals c.TeacherId
+            //                  where t.FirstName == teacherName
+            //                  select c).ToListAsync();
 
-            return null;
+            //var response = _mapper.Map<List<Clase>, List<ClaseDtoR>>(resp);
+
+            var response = await(from t in _context.Teachers
+                                 join c in _context.Clases
+                                 on t.Id equals c.TeacherId
+                                 where t.FirstName == teacherName
+                                 select (new ClaseDtoR
+                                 {
+                                     Description = c.Description,
+                                     Materia = c.Subject.Name,
+                                     Salon = c.Room.Name
+                                 })).ToListAsync();
+
+            return response;
+        }
+
+        public async Task<IEnumerable<ClaseDtoR>> GetClasesBySubjectId(int id)
+        {
+
+            var response = await (from s in _context.Subjects
+                                  join c in _context.Clases
+                                  on s.Id equals c.SubjectId
+                                  where s.Id == id
+                                  select (new ClaseDtoR
+                                  {
+                                      Description = c.Description,
+                                      Materia = c.Subject.Name,
+                                      Salon = c.Room.Name
+                                  })).ToListAsync();
+
+            return response;
         }
 
     }
